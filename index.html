@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>허브 퀴즈 게임</title>
+  <style>
+    .quiz-box {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 16px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      text-align: center;
+      font-family: 'Arial';
+    }
+    .quiz-box img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .quiz-box input {
+      margin-top: 12px;
+      padding: 8px;
+      width: 80%;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+    }
+    .quiz-box button {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background-color: #6db57c;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+    .quiz-box .result {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .quiz-box .score {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-box">
+  <h3 id="question">이 허브의 이름은 무엇일까요?</h3>
+  <img id="quizImage" src="" alt="허브 이미지">
+  <input type="text" id="answer" placeholder="허브 이름 입력 (예: 로즈마리)">
+  <button onclick="checkAnswer()">정답 확인</button>
+  <div class="result" id="result"></div>
+  <div class="score" id="scoreDisplay">현재 점수: 0</div>
+</div>
+
+<script>
+  const quizzes = [
+    {
+      image: "https://cdn.pixabay.com/photo/2016/06/17/06/10/rosemary-1465580_960_720.jpg",
+      answers: ["로즈마리", "rosemary"],
+      info: "로즈마리는 기억력 향상과 집중에 도움을 줘요."
+    },
+    {
+      image: "https://cdn.pixabay.com/photo/2017/02/07/11/00/mint-2045633_1280.jpg",
+      answers: ["민트", "mint"],
+      info: "민트는 소화를 돕고 입냄새 제거에도 효과적이에요."
+    },
+    {
+      image: "https://cdn.pixabay.com/photo/2016/07/22/09/59/lavender-1537694_1280.jpg",
+      answers: ["라벤더", "lavender"],
+      info: "라벤더는 스트레스 완화와 숙면에 좋아요."
+    },
+    {
+      image: "https://cdn.pixabay.com/photo/2020/06/04/14/17/herbs-5259083_1280.jpg",
+      answers: ["파인허브", "fine herb", "파인 허브"],
+      info: "파인허브는 프랑스 요리에 자주 쓰이는 허브 믹스예요."
+    },
+    {
+      image: "https://cdn.pixabay.com/photo/2020/11/29/12/12/eucalyptus-5788764_1280.jpg",
+      answers: ["유칼립투스허브", "유칼립투스", "eucalyptus"],
+      info: "유칼립투스는 감기와 호흡기 질환 완화에 효과적이에요."
+    },
+    {
+      image: "https://cdn.pixabay.com/photo/2021/01/20/20/31/lemon-grass-5936087_1280.jpg",
+      answers: ["레몬글라스", "레몬그라스", "레몬글라스허브", "lemongrass"],
+      info: "레몬글라스는 면역력 강화와 해독에 좋아요."
+    }
+  ];
+
+  let currentQuiz = 0;
+  let score = 0;
+
+  const quizImage = document.getElementById("quizImage");
+  const result = document.getElementById("result");
+  const scoreDisplay = document.getElementById("scoreDisplay");
+
+  function loadQuiz() {
+    const quiz = quizzes[currentQuiz];
+    quizImage.src = quiz.image;
+    result.innerText = "";
+    document.getElementById("answer").value = "";
+  }
+
+  function checkAnswer() {
+    const input = document.getElementById("answer").value.trim().toLowerCase();
+    const quiz = quizzes[currentQuiz];
+    const correctAnswers = quiz.answers.map(ans => ans.toLowerCase());
+
+    if (correctAnswers.includes(input)) {
+      score++;
+      result.innerHTML = `✅ 정답입니다!<br>${quiz.info}`;
+      result.style.color = "green";
+    } else {
+      result.innerHTML = `❌ 오답이에요!<br>정답은 <strong>${quiz.answers[0]}</strong> 입니다.`;
+      result.style.color = "red";
+    }
+
+    scoreDisplay.innerText = `현재 점수: ${score}/${quizzes.length}`;
+    currentQuiz++;
+
+    if (currentQuiz < quizzes.length) {
+      setTimeout(loadQuiz, 2500);
+    } else {
+      setTimeout(() => {
+        quizImage.style.display = "none";
+        document.getElementById("answer").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        result.innerHTML = `🎉 퀴즈 완료!<br><strong>최종 점수: ${score} / ${quizzes.length}</strong>`;
+        scoreDisplay.style.display = "none";
+      }, 2500);
+    }
+  }
+
+  loadQuiz();
+</script>
+
+</body>
+</html>
